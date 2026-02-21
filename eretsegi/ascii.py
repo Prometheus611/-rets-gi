@@ -32,8 +32,29 @@ def printlotbuk(n):
         print("    | ".join(rows5))
         return
 
+def convert(asci):
+    full=[]
+    asci_split=[]
+    for i in range(len(asci)):
+        asci_split.append(asci[i])
+    text_index=[]
+    i=0
+    while i<=len(asci_split)-1:
+        end = 0
+        while end == 0:
+            if asci_split[i]=="\n":
+                end = 1
+            if str(asci_split[i]).isdigit():
+                for f in range(int(asci_split[i])):
+                    text_index.append(asci_split[i+1])
+            i+=1
+        for f in range(0,i,-1):
+            asci_split.pop(f)
+        full.append("".join(text_index))
+        text_index = []
+    return full
 
-
+print("exercise 1:")
 f = open("book.txt", "r")
 book_i = f.read()
 book_lines = book_i.split()
@@ -42,24 +63,51 @@ print(F"   {book_lines[1]}      {book_lines[2]}")
 print(F"  {book_lines[3]}      {book_lines[4]}")
 print(F" {book_lines[5]}")
 print(F"{book_lines[6]}")
-# n=int(input("szám "))
-# printlotbuk(n)
-g = open("book_c.txt", "r")
-asci = g.read()
-asci_split = re.split("\s",asci)
-text_index = []
-for i in range(len(asci_split)):
-    asci_index = asci_split[i]
-    if asci_index.isdigit():
-        for i in range(int(asci_index)):
-            text_index.append(" ")
-    else:
-        no_uno = list(asci_index)
-        if no_uno[-1].isdigit():
-            no_uno.pop(-1)
-        for i in range(0,len(no_uno)-1):
-            if no_uno[i].isdigit():
-                print(int(no_uno[i]))
-                for f in range(0,int(no_uno[i])):
-                    text_index.append(no_uno[i+1])
-    print(text_index)
+print("exercise 2:")
+n=int(input("number of books: "))
+printlotbuk(n)
+print("exercise 4:")
+g = open("comp_c.txt", "r")
+text = g.read()
+image = convert(text)
+with open("comp.txt","w") as c:
+    c.write("")
+for i in range(0,len(image)):
+    with open("comp.txt","a") as c:
+        c.write(image[i])
+        c.write("\n")
+computer = open("comp.txt","r")
+print(computer.read())
+print("exercise 5:")
+comp = open(str(input("name of the compressed file: ")),"r")
+uncomp = open(str(input("name of the uncompressed file: ")),"r")
+a=comp.read()
+b=uncomp.read()
+complen=0
+for i in range(0,len(a)-1):
+    if a[i]=="\n":
+        complen-=1
+    complen+=1
+uncomplen=0
+for i in range(0,len(b)-1):
+    if b[i]=="\n":
+        uncomplen-=1
+    uncomplen+=1
+print(F"number of characters in compressed: {complen}")
+print(F"number of characters in uncompressed: {uncomplen}")
+print(F"compression ration: {round(float(complen/uncomplen),2)}")
+print("exercise 6:")
+bookco = open("book_c.txt","r")
+bookc=bookco.read()
+bookstat_index = convert(bookc)
+width=int()
+blocks=int()
+for i in range(len(bookstat_index)):
+    if len(bookstat_index[i])>width:
+        width=len(bookstat_index[i])
+    for f in range(len(bookstat_index[i])):
+        if bookstat_index[i][f] == "_":
+            blocks+=1
+print(F"height is: {len(bookstat_index)}")
+print(F"width is: {width}")
+print(F"number of blocks: {blocks}")
